@@ -1,0 +1,27 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Backend container configuration
+  backend:
+    build: ./backend
+    container_name: nextrole_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Sync local and container folders to see changes in real time
+      - ./backend:/app
+    environment:
+      # This helps the FastAPI autoreload function work properly inside Docker
+      - WATCHFILES_FORCE_POLLING=true
+
+  # Frontend container configuration
+  frontend:
+    build: ./frontend
+    container_name: nextrole_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    # This prevents the container from closing if we interact with the terminal
+    tty: true
